@@ -56,7 +56,7 @@ namespace Services.Services
 
         public List<Product> Show()
         {
-            var lst = _db.Products.ToList();
+            var lst = _db.Products.OrderByDescending(X => X.Id).ToList();
             return lst;
         }
     }
