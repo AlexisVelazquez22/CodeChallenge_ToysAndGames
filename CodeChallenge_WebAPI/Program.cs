@@ -5,7 +5,19 @@ using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var MyCors = "MyCors";
+
 // Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyCors,
+                      builder =>
+                      {
+                          builder.WithHeaders("*");
+                          builder.WithOrigins("*");
+                          builder.WithMethods("*");
+                      });
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -21,6 +33,8 @@ builder.Services.AddDbContext<AppDbContext>(optios =>
 builder.Services.AddScoped<IProductService, ProductService>();
 
 var app = builder.Build();
+
+app.UseCors(MyCors);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
