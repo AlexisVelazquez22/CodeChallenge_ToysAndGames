@@ -28,7 +28,7 @@ namespace DB.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new ProductConfiguration());
+            modelBuilder.ApplyConfigurationFromAssembly(new ProductConfiguration());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
         }
     }
