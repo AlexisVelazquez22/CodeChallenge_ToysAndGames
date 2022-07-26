@@ -31,6 +31,8 @@ builder.Services.AddDbContext<AppDbContext>(optios =>
 );
 // Add ProductService
 builder.Services.AddScoped<IProductService, ProductService>();
+// Add CompanyService 
+builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 var app = builder.Build();
 
@@ -50,3 +52,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+public partial class Program { }

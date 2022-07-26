@@ -43,21 +43,35 @@ namespace Services.Services
 
         public void Edit(ProductRequest model)
         {
-            var product = _db.Products.Find(model.Id);
+            var product = _db.Products.Find(model.Product_Id);
 
             product.Name = model.Name;
             product.Description = model.Description;
             product.AgeRestriction = model.AgeRestriction;
             product.Price = model.Price;
+            product.Company_Id = model.Company_Id;
 
             _db.Entry(product).State = EntityState.Modified;
             _db.SaveChanges();
         }
 
-        public List<Product> Show()
+        public object Show()
         {
-            var lst = _db.Products.OrderByDescending(X => X.Id).ToList();
-            return lst;
+            var query = from product in _db.Products
+                        orderby product.Product_Id descending
+                        join company in _db.Companies on product.Company_Id equals company.Id
+                        select new
+                        {
+                            product.Product_Id,
+                            product.Name,
+                            product.Description,
+                            product.AgeRestriction,
+                            company.Id,
+                            company.Company_Name,
+                            product.Price
+                        };
+            return query;
         }
+
     }
 }

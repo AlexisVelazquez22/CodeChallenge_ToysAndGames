@@ -9,7 +9,7 @@ namespace DB.Models
 {
     public class Product
     {
-        public int Id { get; set; }
+        public int Product_Id { get; set; }
 
         public string? Name { get; set; }
 

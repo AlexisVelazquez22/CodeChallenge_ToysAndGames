@@ -23,8 +23,8 @@ namespace DB.Configurations
 
             // add constraints
 
-            builder.Property(x => x.Name).IsRequired();
-            builder.Property(X => X.Name).HasMaxLength(50);
+            builder.Property(x => x.Company_Name).IsRequired();
+            builder.Property(X => X.Company_Name).HasMaxLength(50);
         }
     }
 }

@@ -2,7 +2,6 @@
 using DB.Context;
 using DB.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Services.Contracts;
 
 namespace CodeChallenge_WebAPI.Controllers
@@ -11,12 +10,13 @@ namespace CodeChallenge_WebAPI.Controllers
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-
         private readonly IProductService _productService;
+        private readonly ICompanyService _companyService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, ICompanyService companyService)
         {
             _productService = productService;
+            _companyService = companyService;
         }
 
 
@@ -27,7 +27,7 @@ namespace CodeChallenge_WebAPI.Controllers
             {
                 return Ok(_productService.Show());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -55,7 +55,7 @@ namespace CodeChallenge_WebAPI.Controllers
             try
             {
                 _productService.Edit(model);
-                return Ok($"Product {model.Id} modified successfully");
+                return Ok($"Product {model.Product_Id} modified successfully");
 
             }catch(Exception ex)
             {
@@ -77,6 +77,37 @@ namespace CodeChallenge_WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // Company methods
+
+        [HttpGet("Show-Companies")]
+        public IActionResult ShowCompanies()
+        {
+            try
+            {
+                return Ok(_companyService.ShowCompanies());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Add-Company")]
+        public IActionResult AddCompany([FromBody] CompanyRequest model)
+        {
+            try
+            {
+                _companyService.AddCompany(model);
+                return Ok($"New company added: {model.Name}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
     }
 }
