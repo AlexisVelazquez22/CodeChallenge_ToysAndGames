@@ -72,6 +72,8 @@ namespace Services.Services
             //devuelve la entidad actualizada
         }
 
+        //no devuelvas object, mejor devuelve un tipo fuertemente tipado
+        // cambia el nombre del metodo a algo mas entendible como return o Get productsd
         public object Show()
         {
             var query = from product in _db.Products
@@ -83,6 +85,7 @@ namespace Services.Services
                             product.Name,
                             product.Description,
                             product.AgeRestriction,
+                            //te sugiero que renombres este campo a CompanyId. se podria confundir con el id de product_Id
                             company.Id,
                             company.Company_Name,
                             product.Price

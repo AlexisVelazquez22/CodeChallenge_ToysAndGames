@@ -109,6 +109,9 @@ namespace CodeChallenge_WebAPI.Controllers
             }
         }
 
+
+        //ambos metodos Get companies y Add companies deben estar en su propio controlador companies, y deben tener rutas self-descriptives y cumplir con todas las reglas que mencione en este controlador previamente
+
         // Company methods
 
         [HttpGet("Show-Companies")]
