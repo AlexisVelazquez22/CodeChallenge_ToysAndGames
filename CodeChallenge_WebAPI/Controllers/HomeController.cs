@@ -2,7 +2,6 @@
 using DB.Context;
 using DB.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Services.Contracts;
 
 namespace CodeChallenge_WebAPI.Controllers
@@ -13,12 +12,13 @@ namespace CodeChallenge_WebAPI.Controllers
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-
         private readonly IProductService _productService;
+        private readonly ICompanyService _companyService;
 
-        public HomeController(IProductService productService)
+        public HomeController(IProductService productService, ICompanyService companyService)
         {
             _productService = productService;
+            _companyService = companyService;
         }
 
         // esta api debe ser autodescriptiva, "show" no le dice nada al consumidor de la api, api/Home/Show, se entiende que va a msotrar una casa,
@@ -108,6 +108,37 @@ namespace CodeChallenge_WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        // Company methods
+
+        [HttpGet("Show-Companies")]
+        public IActionResult ShowCompanies()
+        {
+            try
+            {
+                return Ok(_companyService.ShowCompanies());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("Add-Company")]
+        public IActionResult AddCompany([FromBody] CompanyRequest model)
+        {
+            try
+            {
+                _companyService.AddCompany(model);
+                return Ok($"New company added: {model.Name}");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
 
     }
 }

@@ -55,12 +55,13 @@ namespace Services.Services
         //Actualiza el método para que sea async
         public void Edit(ProductRequest model)
         {
-            var product = _db.Products.Find(model.Id);
+            var product = _db.Products.Find(model.Product_Id);
 
             product.Name = model.Name;
             product.Description = model.Description;
             product.AgeRestriction = model.AgeRestriction;
             product.Price = model.Price;
+            product.Company_Id = model.Company_Id;
 
             _db.Update();
             //no es necseario marcar la entidad como modified, el Change tracking de EF identifica cuando una entidad ha sido modficada
@@ -71,18 +72,23 @@ namespace Services.Services
             //devuelve la entidad actualizada
         }
 
-        //renombra el metodo a algo mas entendible, Get o retrieve serian adecuados.
-        //no devuelvas un ToList prefiere mejor la version IEnumerable<T> del método.
-        //actuzaliza el metodo para que sea async
-        public List<Product> Show()
+        public object Show()
         {
-            // como buena practica es preferible utilizar el método AsNoTracking para aumentar el performance del query ya que elimina los rows
-            // del tracking de cambios y de respaldo haciendo el retorno de datos mas rápido
-            // tambien si solo vas a regesar la lista, no es necesario almacenarlo en una variable local, haz el return directo, incluso podrias hacer un
-            //expression bodied method como pulic IEnumerable<Product> Get => _db.Products;
-            //utiliza la versión async del ToList o el AsEnumerable dependiendo de como modifiques el metodo
-            var lst = _db.Products.ToList();
-            return lst;
+            var query = from product in _db.Products
+                        orderby product.Product_Id descending
+                        join company in _db.Companies on product.Company_Id equals company.Id
+                        select new
+                        {
+                            product.Product_Id,
+                            product.Name,
+                            product.Description,
+                            product.AgeRestriction,
+                            company.Id,
+                            company.Company_Name,
+                            product.Price
+                        };
+            return query;
         }
+
     }
 }

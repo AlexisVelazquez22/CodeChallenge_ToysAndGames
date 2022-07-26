@@ -17,7 +17,7 @@ namespace DB.Configurations
             builder.ToTable("Product");
 
             // add primary key
-            builder.HasKey(x => x.Id);
+            builder.HasKey(x => x.Product_Id);
             
 
             // add foreign key

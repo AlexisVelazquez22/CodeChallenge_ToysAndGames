@@ -8,7 +8,7 @@ namespace DB.ViewModels
 {
     public class ProductRequest
     {
-        public int Id { get; set; }
+        public int Product_Id { get; set; }
         public string? Name { get; set; }
         public string? Description { get; set; }
         //aqui le falta la restricción de la edad que tiene la tabla Products que debe ser mayor a cero y menor o igual a 100

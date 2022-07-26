@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Services.Contracts
 {
-    public interface IProductService
+    public interface ICompanyService
     {
-        public object Show();
-        public void Add(ProductRequest model);
-        public void Edit(ProductRequest model);
-        public void Eliminate(int id);
+        public List<Company> ShowCompanies();
+
+        public void AddCompany(CompanyRequest model);
+
     }
+
 }
