@@ -2,96 +2,77 @@
 using DB.Models;
 using DB.ViewModels;
 using Services.Contracts;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using AutoMapper;
 
 namespace Services.Services
 {
     public class ProductService : IProductService
     {
         private readonly AppDbContext _db;
+        private readonly IMapper _mapper;
 
-        public ProductService(AppDbContext db)
+        public ProductService(AppDbContext db, IMapper mapper)
         {
             _db = db;
+            _mapper = mapper;
         }
 
-        //Actualiza el método para devolver la entidad recién creada en el controller
-        // actualiza el método para que sea async
-        public void Add(ProductRequest model)
+        public async Task<Product> Add(ProductRequest model)
         {
             var product = new Product();
 
-            //podrias usar Automapper para hacer el mapeo de los campos y no hacerlo a manita uno por uno.
-            product.Name = model.Name;
-            product.Description = model.Description;
-            product.AgeRestriction = model.AgeRestriction;
-            product.Price = model.Price;
-            product.Company_Id = model.Company_Id;
+            product = _mapper.Map<Product>(model);
             _db.Products.Add(product);
+            await _db.SaveChangesAsync();
 
-            //Utiliza la version async
-            _db.SaveChanges();
-
-            //devuelve la entidad recién creada
+            return product;
         }
 
-        //renombra el método eliminate a algo como delete,
-        // tampoco estas validando que el producto exista, si no existe el producto debes devolver un 404 - Not found al consumidor de la api
-        // actualiza el método para que sea async
-        public void Eliminate(int id)
+        public async Task<bool> Delete(int id)
         {
             var product = _db.Products.Find(id);
+
+            if (product == null)
+                return false;
+
             _db.Remove(product);
-            //Utiliza la version async
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
+            return true;
         }
 
-        // No estas validando que el producto exista, si no existe el producto debes devolver un 404 - Not found al consumidor de la api
-        //Actualiza el método para que sea async
-        public void Edit(ProductRequest model)
+        public async Task<Product> Edit(ProductRequest model, int id)
         {
-            var product = _db.Products.Find(model.Product_Id);
+            var product = _db.Products.Find(id);
 
-            product.Name = model.Name;
-            product.Description = model.Description;
-            product.AgeRestriction = model.AgeRestriction;
-            product.Price = model.Price;
-            product.Company_Id = model.Company_Id;
+            if (product != null)
+            {
+                product = _mapper.Map<Product>(model);
+                product.ProductId = id;
+                _db.ChangeTracker.Clear();
+                _db.Update(product);
+                await _db.SaveChangesAsync();
+            }
 
-            _db.Update();
-            //no es necseario marcar la entidad como modified, el Change tracking de EF identifica cuando una entidad ha sido modficada
-            _db.Entry(product).State = EntityState.Modified;
-            //Utiliza la version async
-            _db.SaveChanges();
-
-            //devuelve la entidad actualizada
+            return product;
         }
 
-        //no devuelvas object, mejor devuelve un tipo fuertemente tipado
-        // cambia el nombre del metodo a algo mas entendible como return o Get productsd
-        public object Show()
+        public IEnumerable<dynamic> Get()
         {
             var query = from product in _db.Products
-                        orderby product.Product_Id descending
-                        join company in _db.Companies on product.Company_Id equals company.Id
+                        orderby product.ProductId descending
+                        join company in _db.Companies on product.CompanyId equals company.CompanyId
                         select new
                         {
-                            product.Product_Id,
+                            product.ProductId,
                             product.Name,
                             product.Description,
                             product.AgeRestriction,
-                            //te sugiero que renombres este campo a CompanyId. se podria confundir con el id de product_Id
-                            company.Id,
-                            company.Company_Name,
+                            company.CompanyId,
+                            company.Title,
                             product.Price
                         };
+
             return query;
         }
-
     }
 }
