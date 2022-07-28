@@ -33,6 +33,8 @@ builder.Services.AddDbContext<AppDbContext>(optios =>
 builder.Services.AddScoped<IProductService, ProductService>();
 // Add CompanyService 
 builder.Services.AddScoped<ICompanyService, CompanyService>();
+// mapper
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
