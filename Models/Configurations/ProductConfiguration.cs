@@ -1,11 +1,6 @@
 ﻿using DB.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DB.Configurations
 {
@@ -14,20 +9,24 @@ namespace DB.Configurations
         public void Configure(EntityTypeBuilder<Product> builder)
         {
             // table name
+
             builder.ToTable("Product");
 
             // add primary key
-            builder.HasKey(x => x.Product_Id);
+
+            builder.HasKey(x => x.ProductId);
             
 
             // add foreign key
+
             builder
                 .HasOne(x => x.Company)
                 .WithMany(x => x.Product)
-                .HasForeignKey(x => x.Company_Id);
+                .HasForeignKey(x => x.CompanyId);
 
 
             // add constraints
+
             builder.Property(x => x.Name).IsRequired();
             builder.Property(x => x.Price).IsRequired();
             builder.HasCheckConstraint("CHK_AgeRestriction", "AgeRestriction > 0 AND AgeRestriction <= 100");
