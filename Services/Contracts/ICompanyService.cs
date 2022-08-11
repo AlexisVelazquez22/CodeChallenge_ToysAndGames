@@ -1,5 +1,5 @@
 ﻿using DB.Models;
-using DB.ViewModels;
+using Services.ViewModels;
 
 namespace Services.Contracts
 {

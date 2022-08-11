@@ -1,7 +1,7 @@
 ﻿using DB.Context;
 using DB.Models;
-using DB.ViewModels;
 using Services.Contracts;
+using Services.ViewModels;
 
 namespace Services.Services
 {

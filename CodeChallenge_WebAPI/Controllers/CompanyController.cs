@@ -1,6 +1,6 @@
-﻿using DB.ViewModels;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Services.Contracts;
+using Services.ViewModels;
 
 namespace CodeChallenge_WebAPI.Controllers
 {

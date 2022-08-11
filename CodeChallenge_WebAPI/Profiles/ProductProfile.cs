@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using DB.Models;
-using DB.ViewModels;
+using Services.ViewModels;
 
 namespace CodeChallenge_WebAPI.Profiles
 {
