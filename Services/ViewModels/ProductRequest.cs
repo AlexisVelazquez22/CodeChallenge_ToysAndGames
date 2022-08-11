@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace DB.ViewModels
+namespace Services.ViewModels
 {
     public class ProductRequest
     {
