@@ -1,4 +1,6 @@
 ﻿
+using System.Text.Json.Serialization;
+
 namespace DB.Models
 {
     public class Product
@@ -15,6 +17,7 @@ namespace DB.Models
 
         public int CompanyId { get; set; }
 
+        [JsonIgnore]
         public Company Company { get; set; } 
     }
 }
