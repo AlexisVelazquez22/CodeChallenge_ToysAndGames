@@ -1,8 +1,9 @@
 ﻿using DB.Context;
 using DB.Models;
-using DB.ViewModels;
 using Services.Contracts;
 using AutoMapper;
+using Services.DTOs;
+using Services.ViewModels;
 
 namespace Services.Services
 {
@@ -24,7 +25,7 @@ namespace Services.Services
             product = _mapper.Map<Product>(model);
             _db.Products.Add(product);
             await _db.SaveChangesAsync();
-
+            
             return product;
         }
 
@@ -56,20 +57,20 @@ namespace Services.Services
             return product;
         }
 
-        public IEnumerable<dynamic> Get()
+        public IQueryable<ProductCompanyDTO> Get()
         {
             var query = from product in _db.Products
                         orderby product.ProductId descending
                         join company in _db.Companies on product.CompanyId equals company.CompanyId
-                        select new
+                        select new ProductCompanyDTO
                         {
-                            product.ProductId,
-                            product.Name,
-                            product.Description,
-                            product.AgeRestriction,
-                            company.CompanyId,
-                            company.Title,
-                            product.Price
+                            ProductId = product.ProductId,
+                            Name = product.Name,
+                            Description = product.Description,
+                            AgeRestriction = product.AgeRestriction,
+                            CompanyId = company.CompanyId,
+                            Title = company.Title,
+                            Price = product.Price
                         };
 
             return query;
